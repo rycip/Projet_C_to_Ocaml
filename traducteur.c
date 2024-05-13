@@ -34,7 +34,7 @@ char *ponct(char *arg, context_var *context)
             context->in_var_def = false;
             context->var_dep = true;
         }
-        return "";
+        return "\n";
     }
     return "";
 }
@@ -55,7 +55,7 @@ char *variables(char *arg, context_var *context)
         }
         else
         {
-            asprintf(&out, " in\nlet %s = ref ", arg);
+            asprintf(&out, "in let %s = ref ", arg);
         }
         context->in_var_def = true;
         return out;
