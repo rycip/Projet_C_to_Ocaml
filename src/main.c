@@ -8,61 +8,10 @@
 #include "../lib/lexer/lexer.h" //importe les fonctions du fichier lexer.c
 #include "structs.h"
 #include "ponctuation.h"
+#include "variables.h"
 
 FILE *s;
 FILE *d;
-
-// char *ponct(char *arg, context_var *context)
-// {
-//     if (!strcmp(arg, "}"))
-//     {
-//         context->in_function = false;
-//         return ";;";
-//     }
-//     if (!strcmp(arg, "{"))
-//     {
-//         context->in_function = true;
-//         return "";
-//     }
-//     if (!strcmp(arg, ";"))
-//     {
-//         if (context->in_var_def == true)
-//         {
-//             context->in_var_def = false;
-//             context->var_dep = true;
-//         }
-//         return "\n";
-//     }
-//     return "";
-// }
-
-char *variables(char *arg, context_var *context)
-{
-    char *out;
-    if (!strcmp(arg, "main"))
-    {
-        asprintf(&out, "");
-        return out;
-    }
-    if (context->in_var_def == false)
-    {
-        if (context->var_dep == false)
-        {
-            asprintf(&out, "let %s = ref ", arg);
-        }
-        else
-        {
-            asprintf(&out, "in let %s = ref ", arg);
-        }
-        context->in_var_def = true;
-        return out;
-    }
-    else
-    {
-        asprintf(&out, "!%s ", arg);
-        return out;
-    }
-}
 
 void traducteur(maillon *lex, FILE *d, context_var *context)
 {
@@ -98,10 +47,15 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
     }
 }
 
-int main()
+int main(int argc, char const *argv[])
 {
-    s = fopen("./tests/s", "r");
-    d = fopen("./tests/d", "w");
+    if (argc <= 2)
+    {
+        printf("utiliser : ./main <fichier_c> <sortie>\n");
+        return 1;
+    }
+    s = fopen(argv[1], "r");
+    d = fopen(argv[2], "w");
     context_var *context = malloc(sizeof(context_var));
     context->in_function = false;
     context->in_var_def = false;
@@ -109,4 +63,5 @@ int main()
     context->def_var = false;
     maillon *lex = lexeur(s);
     traducteur(lex, d, context);
+    return 0;
 }

@@ -4,5 +4,5 @@ Pour compiler :
 
 ```
 cd PATH_TO/projet_C_to_Ocaml
-gcc ./src/*.c ./lib/lexer/lexer.c -o ./build/traducteur ; ./build/traducteur
+gcc ./src/*.c ./lib/lexer/lexer.c -o ./build/main ; ./build/main ./tests/s ./tests/d
 ```

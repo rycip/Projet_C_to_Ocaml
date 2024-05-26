@@ -4,10 +4,15 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "lexer.h"
+#include "../lib/lexer/lexer.h" //importe les fonctions du fichier lexer.c
 
-int main(void)
+int main(int argc, char const *argv[])
 {
-    FILE *s = fopen("./s", "r");
+    if (argc <= 1)
+    {
+        return 1;
+    }
+    FILE *s = fopen(argv[1], "r");
     affiche_liste(lexeur(s));
+    return 0;
 }
