@@ -1,44 +1,40 @@
-#include <stdio.h>
+#include <assert.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "./lexer/lexer.h" //importe les fonctions du fichier lexer.c
-
-struct context_var
-{
-    bool in_function; // true si on est dans une fonction
-    bool in_var_def;  // true si on est dans la définition d'une variable
-    bool var_dep;     // true si il y a une variable locale avant
-    bool def_var;
-};
-typedef struct context_var context_var;
+#include "../lib/lexer/lexer.h" //importe les fonctions du fichier lexer.c
+#include "structs.h"
+#include "ponctuation.h"
 
 FILE *s;
 FILE *d;
 
-char *ponct(char *arg, context_var *context)
-{
-    if (!strcmp(arg, "}"))
-    {
-        context->in_function = false;
-        return ";;";
-    }
-    if (!strcmp(arg, "{"))
-    {
-        context->in_function = true;
-        return "";
-    }
-    if (!strcmp(arg, ";"))
-    {
-        if (context->in_var_def == true)
-        {
-            context->in_var_def = false;
-            context->var_dep = true;
-        }
-        return "\n";
-    }
-    return "";
-}
+// char *ponct(char *arg, context_var *context)
+// {
+//     if (!strcmp(arg, "}"))
+//     {
+//         context->in_function = false;
+//         return ";;";
+//     }
+//     if (!strcmp(arg, "{"))
+//     {
+//         context->in_function = true;
+//         return "";
+//     }
+//     if (!strcmp(arg, ";"))
+//     {
+//         if (context->in_var_def == true)
+//         {
+//             context->in_var_def = false;
+//             context->var_dep = true;
+//         }
+//         return "\n";
+//     }
+//     return "";
+// }
 
 char *variables(char *arg, context_var *context)
 {
