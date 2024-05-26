@@ -42,6 +42,9 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
         case 'T':
             context->def_var = true;
             break;
+        case 'C':
+            fprintf(d, "(* %s *)\n", lex->argument);
+            break;
         }
         traducteur(lex->suivant, d, context);
     }
