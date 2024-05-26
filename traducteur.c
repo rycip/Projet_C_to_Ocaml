@@ -2,13 +2,14 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include "lexer.h" //importe les fonctions du fichier lexer.c
+#include "./lexer/lexer.h" //importe les fonctions du fichier lexer.c
 
 struct context_var
 {
     bool in_function; // true si on est dans une fonction
     bool in_var_def;  // true si on est dans la définition d'une variable
     bool var_dep;     // true si il y a une variable locale avant
+    bool def_var;
 };
 typedef struct context_var context_var;
 
@@ -93,6 +94,9 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
         case '0':
             fprintf(d, "%s", lex->argument);
             break;
+        case 'T':
+            context->def_var = true;
+            break;
         }
         traducteur(lex->suivant, d, context);
     }
@@ -100,12 +104,13 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
 
 int main()
 {
-    s = fopen("./s", "r");
-    d = fopen("./d", "w");
+    s = fopen("./tests/s", "r");
+    d = fopen("./tests/d", "w");
     context_var *context = malloc(sizeof(context_var));
     context->in_function = false;
     context->in_var_def = false;
     context->var_dep = false;
+    context->def_var = false;
     maillon *lex = lexeur(s);
     traducteur(lex, d, context);
 }
