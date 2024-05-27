@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../lib/lexer/lexer.h" //importe les fonctions du fichier lexer.c
+#include "../lexer/lexer.h" //importe les fonctions du fichier lexer.c
 
 int main(int argc, char const *argv[])
 {

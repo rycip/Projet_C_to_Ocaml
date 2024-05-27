@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/lexer/lexer.h" //importe les fonctions du fichier lexer.c
+#include "../lexer/lexer.h" //importe les fonctions du fichier lexer.c
 #include "structs.h"
 #include "ponctuation.h"
 #include "variables.h"
@@ -25,25 +25,49 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
         switch (lex->lexeme)
         {
         case 'P':
+            // Ponctuation
             out = ponct(lex->argument, context);
             fprintf(d, "%s", out);
             break;
         case 'O':
+            // Opérateur
             fprintf(d, "%s", lex->argument);
             break;
         case 'V':
+            // Variable
             out = variables(lex->argument, context);
             fprintf(d, "%s", out);
             free(out);
             break;
         case '0':
+            // Entier
             fprintf(d, "%s", lex->argument);
             break;
         case 'T':
             context->def_var = true;
             break;
         case 'C':
+            // Commentaire
             fprintf(d, "(* %s *)\n", lex->argument);
+            break;
+        case 'M':
+            // Mot clé
+            // todo
+            break;
+        case 'S':
+            // Chaine de caractère
+            // todo
+            break;
+        case 'B':
+            // Opérateur binaire
+            // todo
+            break;
+        case 'E':
+            // Opérateur d'affectation
+            // todo
+            break;
+        case 'D':
+            // Début
             break;
         }
         traducteur(lex->suivant, d, context);
