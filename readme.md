@@ -9,6 +9,6 @@ gcc ./src/*.c ./lexer/lexer.c -o ./build/main ; ./build/main ./tests/s.c ./tests
 
 ## TODO
 
-[ ] printf
-[ ] boucles
-[ ] fonctions
+- [ ] printf
+- [ ] boucles
+- [ ] fonctions
