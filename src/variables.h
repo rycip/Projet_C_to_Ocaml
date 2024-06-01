@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "structs.h"
+#include "../lexer/lexer.h"
 
-char *variables(char *arg, context_var *context);
+char *variables(maillon *lex, context_var *context);
+char *definition_variable(maillon *lex, context_var *context);
 #endif // !VARIABLES_H

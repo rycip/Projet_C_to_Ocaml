@@ -7,7 +7,9 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "structs.h"
+#include "../lexer/lexer.h"
 
-char *ponct(char *arg, context_var *context);
+char *ponct(maillon *lex, context_var *context);
 #endif // !PONCTUATION_H

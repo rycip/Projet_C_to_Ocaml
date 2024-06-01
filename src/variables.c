@@ -1,36 +1,33 @@
-#include <assert.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "structs.h"
+#include "variables.h"
 
-char *variables(char *arg, context_var *context)
+char *variables(maillon *lex, context_var *context)
 {
     char *out;
-    if (!strcmp(arg, "main"))
+    if (context->in_var_def == true)
     {
-        asprintf(&out, "");
-        return out;
-    }
-    if (context->in_var_def == false)
-    {
-        if (context->var_dep == false)
-        {
-            asprintf(&out, "let %s = ref ", arg);
-        }
-        else
-        {
-            asprintf(&out, "in let %s = ref ", arg);
-        }
-        context->in_var_def = true;
+        asprintf(&out, "!%s", lex->argument);
         return out;
     }
     else
     {
-        asprintf(&out, "!%s ", arg);
+        asprintf(&out, "%s", lex->argument);
+        context->in_var_def = false;
+        return out;
+    }
+}
+
+char *definition_variable(maillon *lex, context_var *context)
+{
+    char *out;
+    if (!strcmp(lex->argument, "main"))
+    {
+        asprintf(&out, "");
+        return out;
+    }
+    else
+    {
+        asprintf(&out, "let %s = ref (", lex->argument);
+        context->in_var_def = true;
         return out;
     }
 }

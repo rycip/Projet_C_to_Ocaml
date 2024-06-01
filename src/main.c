@@ -9,6 +9,8 @@
 #include "structs.h"
 #include "ponctuation.h"
 #include "variables.h"
+#include "operateur.h"
+#include "util.h"
 
 FILE *s;
 FILE *d;
@@ -26,16 +28,16 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
         {
         case 'P':
             // Ponctuation
-            out = ponct(lex->argument, context);
+            out = ponct(lex, context);
             fprintf(d, "%s", out);
             break;
         case 'O':
             // Opérateur
-            fprintf(d, "%s", lex->argument);
+            fprintf(d, " %s ", operateur(lex->argument));
             break;
         case 'V':
             // Variable
-            out = variables(lex->argument, context);
+            out = variables(lex, context);
             fprintf(d, "%s", out);
             free(out);
             break;
@@ -44,7 +46,8 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
             fprintf(d, "%s", lex->argument);
             break;
         case 'T':
-            context->def_var = true;
+            lex = suivant_sans_espaces(lex);
+            fprintf(d, "%s", definition_variable(lex, context));
             break;
         case 'C':
             // Commentaire
@@ -59,11 +62,15 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
             // todo
             break;
         case 'B':
-            // Opérateur binaire
+            fprintf(d, " %s ", operateur(lex->argument));
             // todo
             break;
         case 'E':
             // Opérateur d'affectation
+            if (context->in_var_def == false)
+            {
+                fprintf(d, " %s ", operateur(lex->argument));
+            }
             // todo
             break;
         case 'D':
@@ -81,13 +88,10 @@ int main(int argc, char const *argv[])
         printf("utiliser : ./main <fichier_c> <sortie>\n");
         return 1;
     }
-    s = fopen(argv[1], "r");
-    d = fopen(argv[2], "w");
+    s = fopen(argv[1], "r"); // fichier c d'entrée
+    d = fopen(argv[2], "w"); // fichier ocaml de sortie
     context_var *context = malloc(sizeof(context_var));
-    context->in_function = false;
-    context->in_var_def = false;
-    context->var_dep = false;
-    context->def_var = false;
+    context_init(context);
     maillon *lex = lexeur(s);
     traducteur(lex, d, context);
     return 0;
