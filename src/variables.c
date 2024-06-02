@@ -3,7 +3,7 @@
 char *variables(maillon *lex, context_var *context)
 {
     char *out;
-    if (context->in_var_def == true)
+    if (context->access_var == true)
     {
         asprintf(&out, "!%s", lex->argument);
         return out;
@@ -11,7 +11,7 @@ char *variables(maillon *lex, context_var *context)
     else
     {
         asprintf(&out, "%s", lex->argument);
-        context->in_var_def = false;
+        context->access_var = true;
         return out;
     }
 }
@@ -28,6 +28,7 @@ char *definition_variable(maillon *lex, context_var *context)
     {
         asprintf(&out, "let %s = ref (", lex->argument);
         context->in_var_def = true;
+        context->access_var = true;
         return out;
     }
 }

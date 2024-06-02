@@ -1,5 +1,5 @@
 let x = ref (0) in 
-(* boo *)
+(*  boo *)
 let y = ref (3 + !x) in 
-(!y) in 
+x := !y + 1
 ;;

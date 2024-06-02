@@ -14,6 +14,7 @@ char *ponct(maillon *lex, context_var *context)
     }
     if (!strcmp(lex->argument, ";"))
     {
+        context->access_var = false;
         if (context->in_var_def == true)
         {
             context->in_var_def = false;
