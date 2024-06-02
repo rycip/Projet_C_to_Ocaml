@@ -33,7 +33,7 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
             break;
         case 'O':
             // Opérateur
-            fprintf(d, " %s ", operateur(lex->argument));
+            fprintf(d, " %s", operateur(lex->argument));
             break;
         case 'V':
             // Variable
@@ -59,17 +59,18 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
             break;
         case 'S':
             // Chaine de caractère
+            fprintf(d, " %s", lex->argument);
             // todo
             break;
         case 'B':
-            fprintf(d, " %s ", operateur(lex->argument));
+            fprintf(d, " %s", operateur(lex->argument));
             // todo
             break;
         case 'E':
             // Opérateur d'affectation
             if (context->in_var_def == false)
             {
-                fprintf(d, " %s ", operateur(lex->argument));
+                fprintf(d, " %s", operateur(lex->argument));
             }
             // todo
             break;

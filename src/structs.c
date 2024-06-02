@@ -11,4 +11,5 @@ void context_init(context_var *context)
     context->in_function = false;
     context->in_var_def = false;
     context->access_var = false;
+    context->in_print_function = false;
 }

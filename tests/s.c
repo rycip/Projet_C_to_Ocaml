@@ -2,5 +2,6 @@ int main()
 {
     int x = 0; // boo
     int y = 3 + x;
-    x = y + 1;
+    // x = y + 1;
+    printf("%d %d\n", x, y);
 }

@@ -10,6 +10,7 @@
 #include <string.h>
 #include "structs.h"
 #include "../lexer/lexer.h"
+#include "print.h"
 
 char *variables(maillon *lex, context_var *context);
 char *definition_variable(maillon *lex, context_var *context);

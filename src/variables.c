@@ -5,7 +5,12 @@ char *variables(maillon *lex, context_var *context)
     char *out;
     if (context->access_var == true)
     {
-        asprintf(&out, "!%s", lex->argument);
+        asprintf(&out, " !%s", lex->argument);
+        return out;
+    }
+    else if (!strcmp(lex->argument, "printf"))
+    {
+        asprintf(&out, "%s", print_function(lex, context));
         return out;
     }
     else

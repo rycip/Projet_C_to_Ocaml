@@ -249,8 +249,10 @@ maillon *lexeur(FILE *fichier)
         // Dernier cas : on est face à quelque chose d'anormal
         else
         {
-            fprintf(stderr, "Le charactère %c de numéro %d n'a pas été reconnu.", c, (int)c);
-            exit(1);
+            c = fgetc(fichier);
+
+            // fprintf(stderr, "Le charactère %c de numéro %d n'a pas été reconnu.", c, (int)c);
+            // exit(1);
         }
     }
     return debut;
