@@ -43,7 +43,7 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
             break;
         case '0':
             // Entier
-            fprintf(d, "%s", lex->argument);
+            fprintf(d, " %s", lex->argument);
             break;
         case 'T':
             lex = suivant_sans_espaces(lex);

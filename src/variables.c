@@ -17,6 +17,7 @@ char *variables(maillon *lex, context_var *context)
     {
         asprintf(&out, "%s", lex->argument);
         context->access_var = true;
+        context->parentheses_var = context->opened_parentheses;
         return out;
     }
 }
@@ -34,6 +35,7 @@ char *definition_variable(maillon *lex, context_var *context)
         asprintf(&out, "let %s = ref (", lex->argument);
         context->in_var_def = true;
         context->access_var = true;
+        context->parentheses_var = context->opened_parentheses;
         return out;
     }
 }
