@@ -1,5 +1,6 @@
 #ifndef VARIABLES_H
 #define VARIABLES_H
+#define _GNU_SOURCE
 
 #include <assert.h>
 #include <stdbool.h>
