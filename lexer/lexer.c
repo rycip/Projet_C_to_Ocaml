@@ -50,6 +50,8 @@ const char *type[] = {"bool", "int", "void"};
 const int len_type = 3;
 const char *motcle[] = {"while"};
 const int len_motcle = 1;
+const char* booleen[] = {"true", "false"}; //Nouveau : Permet le traitement des booleens independamment
+const int len_booleen = 2;
 const char operateurs_simples[] = {'+', '-', '/', '*', '%'};
 const int len_ops = 5;
 const char operateurs_doubles[] = {'=', '|', '&', '<', '>', '!'};
@@ -92,7 +94,6 @@ char *cree_arg(char *buffer, const int len)
     arg[len] = '\0';
     return arg;
 }
-
 maillon *lexeur(FILE *fichier)
 {
     maillon *debut = malloc(sizeof(maillon)); // Premier maillon
@@ -128,7 +129,8 @@ maillon *lexeur(FILE *fichier)
         else if (c == '/')
         {
             c = fgetc(fichier);
-
+            
+            //Commentaire //
             if (c == '/')
             {
                 c = fgetc(fichier);
@@ -142,6 +144,7 @@ maillon *lexeur(FILE *fichier)
                 ajoute_maillon_fin(&fin, 'C', cree_arg(buffer, len_buffer));
                 // 'C' pour indiquer un commentaire
             }
+            //Commentaire /*...*/
             else if (c == '*')
             {
 
@@ -157,6 +160,10 @@ maillon *lexeur(FILE *fichier)
                 c = fgetc(fichier);
                 ajoute_maillon_fin(&fin, 'C', cree_arg(buffer, len_buffer));
                 // 'C' pour indiquer un commentaire
+            }
+            //Opérateur (division euclidienne)
+            else{
+                ajoute_maillon_fin(&fin, 'O', "/");
             }
         }
         // Cas 2 : on récupère de la ponctuation
@@ -221,9 +228,9 @@ maillon *lexeur(FILE *fichier)
         }
 
         // Cas 6 : on est face à quelque chose qui s'écrit avec des lettres : un mot-clé, une constante, une variable, ...
-        else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+        else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '_'))
         {
-            while ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+            while ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '_'))
             {
                 buffer[len_buffer] = c;
                 len_buffer++;
@@ -240,11 +247,21 @@ maillon *lexeur(FILE *fichier)
                 ajoute_maillon_fin(&fin, 'M', chaine);
                 // 'M' pour indiquer un mot clé
             }
+            else if (string_in(chaine,booleen,len_booleen)){
+                ajoute_maillon_fin(&fin, 'b', chaine);
+                // 'b' pour indiquer un mot clé
+            }
             else
             {
                 ajoute_maillon_fin(&fin, 'V', chaine);
             }
             // 'V' pour indiquer une variable
+        }
+        //Traitement des Include
+        else if (c == '#'){
+            while (c != '\n'){
+                c = fgetc(fichier);
+            }
         }
         // Dernier cas : on est face à quelque chose d'anormal
         else

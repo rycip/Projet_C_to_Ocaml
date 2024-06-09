@@ -4,6 +4,8 @@
     "stdbool.h": "c",
     "lexer.h": "c",
     "stdlib.h": "c",
-    "strings.h": "c"
+    "strings.h": "c",
+    "structs.h": "c",
+    "stdio.h": "c"
   }
 }

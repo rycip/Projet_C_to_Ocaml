@@ -11,6 +11,7 @@
 #include "variables.h"
 #include "operateur.h"
 #include "util.h"
+#include "mot_cle.h"
 
 FILE *s;
 FILE *d;
@@ -55,7 +56,7 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
             break;
         case 'M':
             // Mot clé
-            // todo
+            fprintf(d, "%s", mot_cle(lex,context)); // todo
             break;
         case 'S':
             // Chaine de caractère
@@ -74,6 +75,9 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
             }
             // todo
             break;
+        case 'b':
+            //booleen
+            fprintf(d," %s ",lex->argument);
         case 'D':
             // Début
             break;
