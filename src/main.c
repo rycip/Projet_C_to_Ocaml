@@ -34,7 +34,7 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
             break;
         case 'O':
             // Opérateur
-            fprintf(d, " %s", operateur(lex->argument));
+            fprintf(d, "%s", operateur(lex->argument, context));
             break;
         case 'V':
             // Variable
@@ -44,9 +44,13 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
             break;
         case '0':
             // Entier
-            fprintf(d, " %s", lex->argument);
+            if (context->for_arg != 3) // cas spécal de la 3e partie des arguments de la boucle for en c qui ne servent pas ocaml
+            {
+                fprintf(d, "%s", lex->argument);
+            }
             break;
         case 'T':
+            // Types
             lex = suivant_sans_espaces(lex);
             fprintf(d, "%s", definition_variable(lex, context));
             break;
@@ -60,24 +64,23 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
             break;
         case 'S':
             // Chaine de caractère
-            fprintf(d, " %s", lex->argument);
+            fprintf(d, " %s ", lex->argument);
             // todo
             break;
         case 'B':
-            fprintf(d, " %s", operateur(lex->argument));
-            // todo
+            // Opérateurs binaires
+            fprintf(d, "%s", operateur(lex->argument, context));
             break;
         case 'E':
             // Opérateur d'affectation
             if (context->in_var_def == false)
             {
-                fprintf(d, " %s", operateur(lex->argument));
+                fprintf(d, "%s", operateur(lex->argument, context));
             }
-            // todo
             break;
         case 'b':
             // booleen
-            fprintf(d, " %s ", lex->argument);
+            fprintf(d, "%s", lex->argument);
         case 'D':
             // Début
             break;

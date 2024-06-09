@@ -18,6 +18,7 @@ void context_init(context_var *context)
     context->opened_parentheses = 0;
     context->parentheses_var = 2147483647;
     context->boucles = init_boucle();
+    context->for_arg = 0;
 }
 
 bool show_parentheses(context_var *context)

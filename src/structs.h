@@ -25,6 +25,7 @@ struct context_var
     int opened_parentheses; // compte le nombre de parenthèses ouvrantes
     int parentheses_var;    // garde le compteur à un certain moment et affiche les parenthèse tant que opened_parenthese est au dessus de ce compteur
     pile *boucles;          // permet de savoir dans quelle boucle on est ('w'->while, 'i'->if, 'e'->else)
+    int for_arg;            // 0 si on n'est pas dans les arguments d'une boucle for, 1 si on est dans la première partie, 2 la deuxième et 3 la troisième
 };
 typedef struct context_var context_var;
 

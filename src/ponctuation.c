@@ -16,11 +16,11 @@ char *ponct(maillon *lex, context_var *context)
             {
             case 'w':
                 // fin de la boucle while
-                if (suivant_sans_ponct(lex)->lexeme == 'V')
-                {
-                    return "done ;\n";
-                }
-                return "done \n";
+                return "done ;\n";
+                break;
+            case 'f':
+                // fin de la boucle for
+                return "done ;\n";
                 break;
 
             case 'i':
@@ -43,6 +43,7 @@ char *ponct(maillon *lex, context_var *context)
     }
     else if (!strcmp(lex->argument, "{"))
     {
+        context->for_arg = 0;
         context->args = false;
         context->access_var = false;
         if (context->boucles == NULL)
@@ -57,6 +58,10 @@ char *ponct(maillon *lex, context_var *context)
             {
             case 'w':
                 // début de la boucle while
+                return " do\n";
+                break;
+            case 'f':
+                // début de la boucle for
                 return " do\n";
                 break;
 
@@ -100,7 +105,7 @@ char *ponct(maillon *lex, context_var *context)
         if (show_parentheses(context) == true)
         {
             context->opened_parentheses -= 1;
-            return " )";
+            return ")";
         }
         else
         {
@@ -114,14 +119,27 @@ char *ponct(maillon *lex, context_var *context)
         context->in_print_function = false;
         context->parentheses_var = 2147483647;
 
-        // Definition de Variable
-        if (context->in_var_def == true)
+        if (context->for_arg >= 3)
+        {
+            context->for_arg = 0;
+        }
+        else if (context->for_arg == 1)
+        {
+            context->for_arg += 1;
+            return " to ";
+        }
+        else if (context->for_arg > 0)
+        {
+            context->for_arg += 1;
+            return "";
+        }
+        else if (context->in_var_def == true)
         {
             context->in_var_def = false;
-            return " ) in \n";
+            return ") in \n";
         }
 
-        if (suivant_sans_ponct(lex)->lexeme == 'V')
+        else if (suivant_sans_ponct(lex)->lexeme == 'V')
         {
             return ";\n";
         }

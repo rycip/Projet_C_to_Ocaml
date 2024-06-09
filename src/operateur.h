@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "structs.h"
 
-char *operateur(char *ope_c);
+char *operateur(char *ope_c, context_var *context);
 #endif // !OPERATEUR_H

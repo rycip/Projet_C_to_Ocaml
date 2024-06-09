@@ -29,5 +29,12 @@ char *mot_cle(maillon *lex, context_var *context)
         context->args = true;
         context->access_var = true;
     }
+    if (!strcmp(lex->argument, "for"))
+    {
+        ajoute_boucle('w', context);
+        // context->args = true;
+        context->access_var = true;
+        context->for_arg = 1;
+    }
     return lex->argument;
 }

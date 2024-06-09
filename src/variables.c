@@ -3,7 +3,12 @@
 char *variables(maillon *lex, context_var *context)
 {
     char *out;
-    if (context->access_var == true && context->args == false)
+    if (context->for_arg == 2 || context->for_arg == 3)
+    {
+        asprintf(&out, "");
+        return out;
+    }
+    else if (context->access_var == true && context->args == false)
     {
         if (!strcmp(lex->suivant->argument, "(")) // cas d'une utilisation de fonction
         {
@@ -12,7 +17,7 @@ char *variables(maillon *lex, context_var *context)
         }
         else
         {
-            asprintf(&out, " !%s", lex->argument);
+            asprintf(&out, "!%s", lex->argument);
         }
         return out;
     }
@@ -44,6 +49,12 @@ char *variables(maillon *lex, context_var *context)
 char *definition_variable(maillon *lex, context_var *context)
 {
     char *out;
+
+    if (context->for_arg == 1)
+    {
+        return lex->argument;
+    }
+
     if (!strcmp(lex->argument, "main"))
     {
         asprintf(&out, "");
