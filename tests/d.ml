@@ -8,6 +8,5 @@ let while_a = ref ( true  ) in
 while_a := false  && !while_a ; 
 Printf.printf "%d %d\n" ( 3 * !x + !y - 4 ) !y ; 
 let i = ref ( 0 ) in 
-while ( !i = 0 ) do 
- !i := !i + 1 ; 
+while ( !i = 0 ) !i := !i + 1 ; 
 ;;;;

@@ -35,7 +35,7 @@ char *ponct(maillon *lex, context_var *context)
     else if (!strcmp(lex->argument, "{"))
     {
         context->accolades_ouvrantes += 1;
-        if (show_aacolades(context) == true)
+        if (show_accolades(context) == true)
         {
             return " (";
         }
@@ -44,9 +44,11 @@ char *ponct(maillon *lex, context_var *context)
             return "";
         }
     }
-    else if (!strcmp(lex->argument, "}")){
-        if(context->boucle == true){
-            context->boucle == false;
+    else if (!strcmp(lex->argument, "}"))
+    {
+        if (context->boucle == true)
+        {
+            context->boucle = false;
             return " done; \n";
         }
         else if (show_accolades(context) == true)
@@ -66,7 +68,7 @@ char *ponct(maillon *lex, context_var *context)
         context->in_print_function = false;
         context->parentheses_var = 2147483647;
 
-        //Definition de Variable
+        // Definition de Variable
         if (context->in_var_def == true)
         {
             context->in_var_def = false;
