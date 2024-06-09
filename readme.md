@@ -11,4 +11,4 @@ gcc ./src/*.c ./lexer/lexer.c -o ./build/main ; ./build/main ./tests/s.c ./tests
 
 - [x] printf
 - [ ] boucles
-- [ ] fonctions
+- [x] fonctions

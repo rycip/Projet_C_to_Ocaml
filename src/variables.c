@@ -3,9 +3,17 @@
 char *variables(maillon *lex, context_var *context)
 {
     char *out;
-    if (context->access_var == true)
+    if (context->access_var == true && context->fct_args == false)
     {
-        asprintf(&out, " !%s", lex->argument);
+        if (!strcmp(lex->suivant->argument, "(")) // cas d'une utilisation de fonction
+        {
+            context->fct_args = true;
+            asprintf(&out, " %s", lex->argument);
+        }
+        else
+        {
+            asprintf(&out, " !%s", lex->argument);
+        }
         return out;
     }
     else if (!strcmp(lex->argument, "printf"))
@@ -15,7 +23,14 @@ char *variables(maillon *lex, context_var *context)
     }
     else
     {
-        asprintf(&out, "%s", lex->argument);
+        if (!strcmp(lex->argument, "return"))
+        {
+            asprintf(&out, "");
+        }
+        else
+        {
+            asprintf(&out, "%s", lex->argument);
+        }
         context->access_var = true;
         context->parentheses_var = context->opened_parentheses;
         return out;
@@ -28,6 +43,18 @@ char *definition_variable(maillon *lex, context_var *context)
     if (!strcmp(lex->argument, "main"))
     {
         asprintf(&out, "");
+        return out;
+    }
+    if (context->fct_args == true)
+    {
+        asprintf(&out, "%s", lex->argument);
+        return out;
+    }
+    if (!strcmp(lex->suivant->argument, "(")) // cas d'une définition de fonction
+    {
+        context->function_def = true;
+        context->fct_args = true;
+        asprintf(&out, "let %s(", lex->argument);
         return out;
     }
     else

@@ -4,8 +4,7 @@ char *ponct(maillon *lex, context_var *context)
 {
     if (!strcmp(lex->argument, "}"))
     {
-        context->in_function = false;
-        return ";;";
+        return ";;\n";
     }
     else if (!strcmp(lex->argument, "("))
     {
@@ -21,6 +20,20 @@ char *ponct(maillon *lex, context_var *context)
     }
     else if (!strcmp(lex->argument, ")"))
     {
+        if (context->fct_args == true)
+        {
+            context->fct_args = false;
+            context->opened_parentheses -= 1;
+            if (context->function_def == true)
+            {
+                context->function_def = false;
+                return ") =\n";
+            }
+            else
+            {
+                return ")";
+            }
+        }
         if (show_parentheses(context) == true)
         {
             context->opened_parentheses -= 1;
@@ -76,6 +89,13 @@ char *ponct(maillon *lex, context_var *context)
         }
 
         return " ; \n";
+    }
+    else if (!strcmp(lex->argument, ","))
+    {
+        if (context->fct_args == true)
+        {
+            return ",";
+        }
     }
     return "";
 }
