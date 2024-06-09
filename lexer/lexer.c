@@ -44,13 +44,13 @@ void libere_liste(maillon *debut)
 
 // Ici on définit des lexèmes qui nous intéressent. Si vous en rajoutez, pensez à changer la taille des tableaux.
 
-const char ponctuation[] = {'(', ')', '{', '}', ' ', '\n', ';'};
-const int len_ponctuation = 7;
+const char ponctuation[] = {'(', ')', '{', '}', ' ', '\n', ';', ','}; // ajout de ","
+const int len_ponctuation = 8;
 const char *type[] = {"bool", "int", "void"};
 const int len_type = 3;
 const char *motcle[] = {"while"};
 const int len_motcle = 1;
-const char* booleen[] = {"true", "false"}; //Nouveau : Permet le traitement des booleens independamment
+const char *booleen[] = {"true", "false"}; // Nouveau : Permet le traitement des booleens independamment
 const int len_booleen = 2;
 const char operateurs_simples[] = {'+', '-', '/', '*', '%'};
 const int len_ops = 5;
@@ -129,12 +129,12 @@ maillon *lexeur(FILE *fichier)
         else if (c == '/')
         {
             c = fgetc(fichier);
-            
-            //Commentaire //
+
+            // Commentaire //
             if (c == '/')
             {
                 c = fgetc(fichier);
-                while (c != '\n')
+                while (c != '\n' && c != EOF)
                 {
                     buffer[len_buffer] = c;
                     len_buffer++;
@@ -144,7 +144,7 @@ maillon *lexeur(FILE *fichier)
                 ajoute_maillon_fin(&fin, 'C', cree_arg(buffer, len_buffer));
                 // 'C' pour indiquer un commentaire
             }
-            //Commentaire /*...*/
+            // Commentaire /*...*/
             else if (c == '*')
             {
 
@@ -161,8 +161,9 @@ maillon *lexeur(FILE *fichier)
                 ajoute_maillon_fin(&fin, 'C', cree_arg(buffer, len_buffer));
                 // 'C' pour indiquer un commentaire
             }
-            //Opérateur (division euclidienne)
-            else{
+            // Opérateur (division euclidienne)
+            else
+            {
                 ajoute_maillon_fin(&fin, 'O', "/");
             }
         }
@@ -247,7 +248,8 @@ maillon *lexeur(FILE *fichier)
                 ajoute_maillon_fin(&fin, 'M', chaine);
                 // 'M' pour indiquer un mot clé
             }
-            else if (string_in(chaine,booleen,len_booleen)){
+            else if (string_in(chaine, booleen, len_booleen))
+            {
                 ajoute_maillon_fin(&fin, 'b', chaine);
                 // 'b' pour indiquer un mot clé
             }
@@ -257,9 +259,11 @@ maillon *lexeur(FILE *fichier)
             }
             // 'V' pour indiquer une variable
         }
-        //Traitement des Include
-        else if (c == '#'){
-            while (c != '\n'){
+        // Traitement des Include
+        else if (c == '#')
+        {
+            while (c != '\n')
+            {
                 c = fgetc(fichier);
             }
         }
