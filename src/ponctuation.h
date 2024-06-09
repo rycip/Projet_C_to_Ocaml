@@ -10,6 +10,7 @@
 #include <string.h>
 #include "structs.h"
 #include "../lexer/lexer.h"
+#include "util.h"
 
 char *ponct(maillon *lex, context_var *context);
 #endif // !PONCTUATION_H

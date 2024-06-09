@@ -56,7 +56,7 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
             break;
         case 'M':
             // Mot clé
-            fprintf(d, "%s", mot_cle(lex,context)); // todo
+            fprintf(d, "%s ", mot_cle(lex, context));
             break;
         case 'S':
             // Chaine de caractère
@@ -76,8 +76,8 @@ void traducteur(maillon *lex, FILE *d, context_var *context)
             // todo
             break;
         case 'b':
-            //booleen
-            fprintf(d," %s ",lex->argument);
+            // booleen
+            fprintf(d, " %s ", lex->argument);
         case 'D':
             // Début
             break;
@@ -99,5 +99,6 @@ int main(int argc, char const *argv[])
     context_init(context);
     maillon *lex = lexeur(s);
     traducteur(lex, d, context);
+    free(context);
     return 0;
 }
