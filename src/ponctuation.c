@@ -4,14 +4,83 @@ char *ponct(maillon *lex, context_var *context)
 {
     if (!strcmp(lex->argument, "}"))
     {
-        return ";;\n";
+        if (aucune_boucle(context))
+        {
+
+            return ";;\n";
+        }
+        else
+        {
+            char c = retire_boucle(context);
+            switch (c)
+            {
+            case 'w':
+                // fin de la boucle while
+                return "done ;\n";
+                break;
+            case 'f':
+                // fin de la boucle for
+                return "done ;\n";
+                break;
+
+            case 'i':
+                // fin de la boucle if
+                if (suivant_sans_ponct(lex)->lexeme == 'V')
+                {
+                    return "end;\n";
+                }
+                return "end\n";
+
+            case 'e':
+                // fin de la boucle else
+                if (suivant_sans_ponct(lex)->lexeme == 'V')
+                {
+                    return "end;\n";
+                }
+                return "end\n";
+            }
+        }
+    }
+    else if (!strcmp(lex->argument, "{"))
+    {
+        context->for_arg = 0;
+        context->args = false;
+        context->access_var = false;
+        if (context->boucles == NULL)
+        {
+            return "";
+        }
+        else
+        {
+            char c = retire_boucle(context);
+            ajoute_boucle(c, context);
+            switch (c)
+            {
+            case 'w':
+                // début de la boucle while
+                return " do\n";
+                break;
+            case 'f':
+                // début de la boucle for
+                return " do\n";
+                break;
+
+            case 'i':
+                // début de la boucle if
+                return " then begin\n";
+
+            case 'e':
+                // début de la boucle else
+                return " begin\n";
+            }
+        }
     }
     else if (!strcmp(lex->argument, "("))
     {
         context->opened_parentheses += 1;
-        if (show_parentheses(context) == true)
+        if (show_parentheses(context) == true || context->args == true)
         {
-            return " (";
+            return "(";
         }
         else
         {
@@ -20,9 +89,8 @@ char *ponct(maillon *lex, context_var *context)
     }
     else if (!strcmp(lex->argument, ")"))
     {
-        if (context->fct_args == true)
+        if (context->args == true)
         {
-            context->fct_args = false;
             context->opened_parentheses -= 1;
             if (context->function_def == true)
             {
@@ -37,41 +105,11 @@ char *ponct(maillon *lex, context_var *context)
         if (show_parentheses(context) == true)
         {
             context->opened_parentheses -= 1;
-            return " )";
+            return ")";
         }
         else
         {
             context->opened_parentheses -= 1;
-            return "";
-        }
-    }
-    else if (!strcmp(lex->argument, "{"))
-    {
-        context->accolades_ouvrantes += 1;
-        if (show_accolades(context) == true)
-        {
-            return " (";
-        }
-        else
-        {
-            return "";
-        }
-    }
-    else if (!strcmp(lex->argument, "}"))
-    {
-        if (context->boucle == true)
-        {
-            context->boucle = false;
-            return " done; \n";
-        }
-        else if (show_accolades(context) == true)
-        {
-            context->accolades_ouvrantes -= 1;
-            return " }";
-        }
-        else
-        {
-            context->accolades_ouvrantes -= 1;
             return "";
         }
     }
@@ -81,18 +119,35 @@ char *ponct(maillon *lex, context_var *context)
         context->in_print_function = false;
         context->parentheses_var = 2147483647;
 
-        // Definition de Variable
-        if (context->in_var_def == true)
+        if (context->for_arg >= 3)
+        {
+            context->for_arg = 0;
+        }
+        else if (context->for_arg == 1)
+        {
+            context->for_arg += 1;
+            return " to ";
+        }
+        else if (context->for_arg > 0)
+        {
+            context->for_arg += 1;
+            return "";
+        }
+        else if (context->in_var_def == true)
         {
             context->in_var_def = false;
-            return " ) in \n";
+            return ") in \n";
         }
 
-        return " ; \n";
+        else if (suivant_sans_ponct(lex)->lexeme == 'V')
+        {
+            return ";\n";
+        }
+        return "\n";
     }
     else if (!strcmp(lex->argument, ","))
     {
-        if (context->fct_args == true)
+        if (context->args == true)
         {
             return ",";
         }
